@@ -33,7 +33,7 @@ class ChatUser {
     this.room.join(this);
     this.room.broadcast({
       type: 'note',
-      text: `${this.name} joined "${this.room.name}".`
+      text: `${this.name} joined "${this.room.name}".`,
     });
   }
 
@@ -43,7 +43,7 @@ class ChatUser {
     this.room.broadcast({
       name: this.name,
       type: 'chat',
-      text: text
+      text: text,
     });
   }
 
@@ -58,6 +58,7 @@ class ChatUser {
 
     if (msg.type === 'join') this.handleJoin(msg.name);
     else if (msg.type === 'chat') this.handleChat(msg.text);
+    else if (msg.type === 'joke') this.handleJoke();
     else throw new Error(`bad message: ${msg.type}`);
   }
 
@@ -67,8 +68,19 @@ class ChatUser {
     this.room.leave(this);
     this.room.broadcast({
       type: 'note',
-      text: `${this.name} left ${this.room.name}.`
+      text: `${this.name} left ${this.room.name}.`,
     });
+  }
+
+  handleJoke() {
+    const joke = 'Make ya own joke!';
+    const data = this.makeAObj(this.name, 'joke', joke);
+
+    this.send(JSON.stringify(data));
+  }
+
+  makeAObj(name, type, text) {
+    return { name, type, text };
   }
 }
 
