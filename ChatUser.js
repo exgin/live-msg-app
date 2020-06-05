@@ -59,6 +59,7 @@ class ChatUser {
     if (msg.type === 'join') this.handleJoin(msg.name);
     else if (msg.type === 'chat') this.handleChat(msg.text);
     else if (msg.type === 'joke') this.handleJoke();
+    else if (msg.type === 'members') this.handleMembers();
     else throw new Error(`bad message: ${msg.type}`);
   }
 
@@ -75,6 +76,13 @@ class ChatUser {
   handleJoke() {
     const joke = 'Make ya own joke!';
     const data = this.makeAObj(this.name, 'joke', joke);
+
+    this.send(JSON.stringify(data));
+  }
+
+  handleMembers() {
+    const allMembers = Array.from(this.room.members).map((user) => user.name);
+    const data = this.makeAObj(this.name, `members`, `Everyone in the room ${allMembers}`);
 
     this.send(JSON.stringify(data));
   }
